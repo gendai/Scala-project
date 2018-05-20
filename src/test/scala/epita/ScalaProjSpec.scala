@@ -1,17 +1,17 @@
-package example
+package epita
 
 import org.scalatest._
-import example.DatabaseInterface._
+import epita.DatabaseInterface._
 
 abstract class UnitSpec extends FreeSpec with Matchers
 
-class HelloSpec extends UnitSpec {
-  
+class ScalaProjSpec extends UnitSpec {
+
   val country1 = Country("302790,\"BO\",\"Bolivia\",\"SA\",\"http://en.wikipedia.org/wiki/Bolivia\",")
   val country2 = Country("302681,\"DE\",\"Germany\",\"EU\",\"http://en.wikipedia.org/wiki/Germany\",\"Deutschland\"")
   val country3 = Country("302613,\"ZZ\",\"Unknown or unassigned country\",\"AF\",\"http://en.wikipedia.org/wiki/Unknown_or_unassigned_country\",")
   val country4 = Country(",,,,,")
-  
+
   "A Country" - {
     "Code method should return its code" in {
       country1.Code() shouldEqual Some("BO")
@@ -19,7 +19,7 @@ class HelloSpec extends UnitSpec {
       country3.Code() shouldEqual Some("ZZ")
       country4.Code() shouldEqual None
     }
-  
+
     "Name method should return its name" in {
       country1.Name() shouldEqual Some("Bolivia")
       country2.Name() shouldEqual Some("Germany")
@@ -27,12 +27,12 @@ class HelloSpec extends UnitSpec {
       country4.Name() shouldEqual None
     }
   }
-  
+
   val airport1 = Airport("6558,\"00PA\",\"heliport\",\"R J D Heliport\",39.94889831542969,-75.74690246582031,402,\"NA\",\"US\",\"US-PA\",\"Coatesville\",\"no\",\"00PA\",,\"00PA\",,,")
   val airport2 = Airport("314608,\"ETAS\",\"closed\",\"Sembach Air Base\",49.507,7.866,1050,\"EU\",\"DE\",\"DE-RP\",\"Sembach\",\"no\",\"ETAS\",\"SEX\",,,\"http://en.wikipedia.org/wiki/Sembach_Kaserne\",")
   val airport3 = Airport("27243,\"ZYTX\",\"large_airport\",\"Taoxian Airport\",41.639801025390625,123.48300170898438,198,\"AS\",\"CN\",\"CN-21\",\"Shenyang\",\"yes\",\"ZYTX\",\"SHE\",,,\"http://en.wikipedia.org/wiki/Shenyang_Taoxian_International_Airport\"")
   val airport4 = Airport(",,,,,,,,,,,,,,,")
-  
+
   "An Airport" - {
     "Id method should return its id" in {
       airport1.Id() shouldEqual Some("00PA")
@@ -40,7 +40,7 @@ class HelloSpec extends UnitSpec {
       airport3.Id() shouldEqual Some("ZYTX")
       airport4.Id() shouldEqual None
     }
-  
+
     "CountryCode method should return its country code" in {
       airport1.CountryCode() shouldEqual Some("US")
       airport2.CountryCode() shouldEqual Some("DE")
@@ -48,14 +48,14 @@ class HelloSpec extends UnitSpec {
       airport4.CountryCode() shouldEqual None
     }
   }
-  
+
   val runway1 = Runway("245528,6528,\"00CA\",6000,80,\"ASPH\",0,0,\"04\",35.3493,-116.893,,50,,\"22\",35.3603,-116.878,,,")
   val runway2 = Runway("238773,2771,\"FABE\",8202,197,\"ASP\",1,0,\"08\",-32.9034,27.268,1945,57,,\"26\",-32.8909,27.2903,1950,237,")
   val runway3 = Runway("313663,313629,\"ZZZZ\",1713,82,\"concrete\",0,0,\"18\",30.7835,130.273,,,,\"36\",30.7781,130.273,,,")
   val runwayNoLat = Runway("259476,38630,\"YVSH\",4593,,\"X\",0,0,,,,,,,,,,,,")
   val runwayNoType = Runway("259476,38630,\"YVSH\",4593,,,0,0,,,,,,,,,,,,")
   val runwayEmpty = Runway(",,,,,,,,,,,,,,,,,,")
-  
+
   "A Runway" - {
     "AirportRef method should return its airport Ref code" in {
       runway1.AirportRef() shouldEqual Some("00CA")
@@ -65,7 +65,7 @@ class HelloSpec extends UnitSpec {
       runwayNoType.AirportRef() shouldEqual Some("YVSH")
       runwayEmpty.AirportRef() shouldEqual None
     }
-    
+
     "HasLatitude method should return true if the latitude column is filled" in {
       runway1.HasLatitude() shouldEqual true
       runway2.HasLatitude() shouldEqual true
@@ -74,7 +74,7 @@ class HelloSpec extends UnitSpec {
       runwayNoType.HasLatitude() shouldEqual false
       runwayEmpty.HasLatitude() shouldEqual false
     }
-    
+
     "Latitue method should return its latitude" in {
       runway1.Latitude() shouldEqual Some("04")
       runway2.Latitude() shouldEqual Some("08")
@@ -83,7 +83,7 @@ class HelloSpec extends UnitSpec {
       runwayNoType.Latitude() shouldEqual None
       runwayEmpty.Latitude() shouldEqual None
     }
-    
+
     "HasType method should return true if the type column is filled" in {
       runway1.HasType() shouldEqual true
       runway2.HasType() shouldEqual true
@@ -92,7 +92,7 @@ class HelloSpec extends UnitSpec {
       runwayNoType.HasType() shouldEqual false
       runwayEmpty.HasType() shouldEqual false
     }
-  
+
     "Type method should return its type" in {
       runway1.Type() shouldEqual Some("ASPH")
       runway2.Type() shouldEqual Some("ASP")
@@ -102,18 +102,18 @@ class HelloSpec extends UnitSpec {
       runwayEmpty.Type() shouldEqual None
     }
   }
- 
+
   "DatabaseInterface" -
   {
     val countryAndorra = Country("302672,\"AD\",\"Andorra\",\"EU\",\"http://en.wikipedia.org/wiki/Andorra\",")
     val countryFrance = Country("302687,\"FR\",\"France\",\"EU\",\"http://en.wikipedia.org/wiki/France\",")
-    
+
     "GetCountryFromInput should return the country, from the countries.csv, with the country code or name" in {
       DatabaseInterface.GetCountryFromInput("AD") shouldEqual Some(countryAndorra)
       DatabaseInterface.GetCountryFromInput("France") shouldEqual Some(countryFrance)
       DatabaseInterface.GetCountryFromInput("Bad") shouldEqual None
     }
-    
+
     val mayotteQuery = List("List of airports and their runways in Mayotte :\n","    - Airport id is 2904, ident is FMCZ, airport type : medium_airport, name is Dzaoudzi Pamandzi International Airport :\n","        - Runway id is 237545, length of 6330 and width of 92, runway surface type : ASP\n")
     val guineaQuery = List("List of airports and their runways in Guinea :\n",
                             "    - Airport id is 3146, ident is GUCY, airport type : medium_airport, name is Conakry Airport :\n",
@@ -135,12 +135,12 @@ class HelloSpec extends UnitSpec {
                             "    - Airport id is 32250, ident is GUSB, airport type : small_airport, name is Sambailo Airport :\n",
                             "    - Airport id is 31530, ident is GUSI, airport type : small_airport, name is Siguiri Airport :\n",
                             "    - Airport id is 44577, ident is GUXN, airport type : small_airport, name is Kankan Airport :\n")
-                            
+
     "Query should return the list of airports and runways in an given country (input is country code or name from countries.csv)" in {
       Query("Mayotte") shouldEqual mayotteQuery
       Query("GN") shouldEqual guineaQuery
       Query("Bad") shouldEqual List("Country code or name not found : Bad")
-    } 
+    }
     val reportRes = List("The ten countries with the more airports are :\n",
                           "    - United States with 21501\n",
                           "    - Brazil with 3839\n",
@@ -1805,7 +1805,7 @@ class HelloSpec extends UnitSpec {
                           "    - 08 (nb = 1459)\n",
                           "    - 13 (nb = 1447)\n",
                           "    - 15 (nb = 1399)\n")
-    
+
     "Reports should return the report of the csv files" in {
       Reports() shouldEqual reportRes
     }
