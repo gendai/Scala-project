@@ -37,11 +37,11 @@ from the csv.
 ######## Build ######
 
 To build this project, you need sbt, on linux you probably will have to install
-java-openjfx or its equivalence from your package manager.
+java-openjfx or its equivalence (e.g: openjfx) from your package manager.
 
 While in the repository launch sbt assembly, this will generate a jar file
-in target/scala-2.12/ScalaProj-assembly-1.0.0.jar. You can launch it
-with java -jar ScalaProj-assembly-1.0.0.jar.
+in target/scala-2.12/ScalaProj-assembly-1.0.0.jar.
+You can launch it with java -jar ScalaProj-assembly-1.0.0.jar.
 
 ####################
 
